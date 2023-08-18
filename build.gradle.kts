@@ -1,5 +1,6 @@
 val project_version: String by project
 val jdk_version: String by project
+val kotlinx_datetime_version: String by project
 val hcmc_extension_version: String by project
 val exposed_version: String by project
 
@@ -47,6 +48,8 @@ dependencies {
     implementation("com.github.hcmc-studio:exposed-transaction-extension:$hcmc_extension_version")
     implementation("com.github.hcmc-studio:kotlin-format-extension:$hcmc_extension_version")
     implementation("com.github.hcmc-studio:kotlin-protocol-extension:$hcmc_extension_version")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:$kotlinx_datetime_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")

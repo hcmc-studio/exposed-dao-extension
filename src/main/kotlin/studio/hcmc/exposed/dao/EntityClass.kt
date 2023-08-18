@@ -26,7 +26,7 @@ inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findByIdOrThrow(
     return findById(id) ?: throw throwable()
 }
 
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findVisibleByIdOrThrow(
+inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findNotDeletedByIdOrThrow(
     id: ID,
     throwable: () -> Throwable
 ): T where T : Entity<ID>, T : Deletable {
@@ -38,7 +38,7 @@ inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findVisibleByIdOrThrow(
     return entity
 }
 
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findVisibleByIdOrThrow(
+inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findNotDeletedByIdOrThrow(
     id: EntityID<ID>,
     throwable: () -> Throwable
 ): T where T : Entity<ID>, T : Deletable {
