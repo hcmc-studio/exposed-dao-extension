@@ -1,51 +1,29 @@
 package studio.hcmc.exposed.dao
 
-import org.jetbrains.exposed.dao.*
+import org.jetbrains.exposed.dao.DaoEntityID
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.SizedIterable
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import studio.hcmc.exposed.table.orderBy
-import studio.hcmc.kotlin.protocol.Deletable
-import studio.hcmc.kotlin.protocol.SortOrder
-import java.util.*
+import org.jetbrains.exposed.sql.vendors.ForUpdateOption
 
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findByIdOrThrow(
+fun <ID : Comparable<ID>, T : Entity<ID>> EntityClass<ID, T>.findByIdForUpdate(
     id: ID,
-    throwable: () -> Throwable
-): T where T : Entity<ID> {
-    return findById(id) ?: throw throwable()
+    option: ForUpdateOption = ForUpdateOption.ForUpdate
+): T? {
+    return findByIdForUpdate(DaoEntityID(id, table), option)
 }
 
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findByIdOrThrow(
+fun <ID : Comparable<ID>, T : Entity<ID>> EntityClass<ID, T>.findByIdForUpdate(
     id: EntityID<ID>,
-    throwable: () -> Throwable
-): T where T : Entity<ID> {
-    return findById(id) ?: throw throwable()
-}
-
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findNotDeletedByIdOrThrow(
-    id: ID,
-    throwable: () -> Throwable
-): T where T : Entity<ID>, T : Deletable {
-    val entity = findById(id)
-    if (entity == null || entity.isDeleted) {
-        throw throwable()
+    option: ForUpdateOption = ForUpdateOption.ForUpdate
+): T? {
+    val present = testCache(id)
+    if (present != null) {
+        removeFromCache(present)
     }
 
-    return entity
-}
-
-inline fun <ID : Comparable<ID>, T> EntityClass<ID, T>.findNotDeletedByIdOrThrow(
-    id: EntityID<ID>,
-    throwable: () -> Throwable
-): T where T : Entity<ID>, T : Deletable {
-    val entity = findById(id)
-    if (entity == null || entity.isDeleted) {
-        throw throwable()
-    }
-
-    return entity
+    return find(table.id.eq(id))
+        .forUpdate(option)
+        .firstOrNull()
 }

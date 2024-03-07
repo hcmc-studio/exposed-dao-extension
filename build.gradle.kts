@@ -44,14 +44,8 @@ publishing {
 }
 
 dependencies {
-    implementation("com.github.hcmc-studio:exposed-table-extension:$hcmc_extension_version")
-    implementation("com.github.hcmc-studio:exposed-transaction-extension:$hcmc_extension_version")
-    implementation("com.github.hcmc-studio:kotlin-format-extension:$hcmc_extension_version")
-    implementation("com.github.hcmc-studio:kotlin-protocol-extension:$hcmc_extension_version")
-
     implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:$kotlinx_datetime_version")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
 }
